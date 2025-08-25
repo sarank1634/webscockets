@@ -63,19 +63,33 @@ io.on('connection', socket => {
           // to user who joined
           socket.emit(`message`, buildMsg(ADMIN, 'You have joined  the  ${user.room} chat Room'))
 
+          // To every else
           socket.broadcast.to(user.room).emit('message', buildMsg(ADMIN, `${user.name} has joined the room`))
+
+          //Update user list for room
+          io.to(user.room).emit('userList', {
+            users: getUsersInRoom(user.room)
+          })
+
+          //Update rooms list for every one
+          io.to('roomsList', {
+            roomlist: getAllActiveRooms()
+          })
      })
+
+   //When the user is disconnected to all others
+    socket.on('disconnect', () => {
+        const usere = getUser(socket.id)
+        userLeavesApp(socket.id)
+
+        socket.broadcast.emit('message', `User ${socket.id.
+            substring(0,5)} disconnected`)
+    })
 
      //Listing for a message event
     socket.on('message', data => {
        console.log(`${data}`)
         io.emit('message', `${socket.id.substring(0, 5)}: ${data}`)
-    })
-
-    //When the user is disconnected to all others
-    socket.on('disconnect', () => {
-        socket.broadcast.emit('message', `User ${socket.id.
-            substring(0,5)} disconnected`)
     })
 
     //Listing for activity
@@ -107,7 +121,7 @@ function activateUser(id, name, room) {
     return user
 }
 
-function userLeacesApp(id){
+function userLeavesApp(id){
     userState.setUser(
         userState.users.filter(user => user.id !== id)
     )
