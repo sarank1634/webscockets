@@ -1,7 +1,12 @@
 const socket = io('ws://localhost:3500') //env
 
+const msgInput = document.querySelector('#message')
+const nameInput = document.querySelector('#name')
+const chatRoom = document.querySelector('#room')
 const activity = document.querySelector('.activity')
-const msgInput = document.querySelector('input')
+const userlist = document.querySelector('.user-list')
+const roomlist = document.querySelector('.room-list')
+
 
 
 function sendMessage(e) {
