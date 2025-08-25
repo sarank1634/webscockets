@@ -26,3 +26,37 @@ button {
     border-radius: 10px;
     padding: 10px;
 }
+
+/* Message styles */
+li {
+    margin: 5px 0;
+    padding: 8px 12px;
+    border-radius: 8px;
+    max-width: 80%;
+}
+
+li.sent {
+    background-color: #007bff;
+    align-self: flex-end;
+    margin-left: auto;
+}
+
+li.received {
+    background-color: #28a745;
+    align-self: flex-start;
+}
+
+li.system {
+    background-color: #6c757d;
+    align-self: center;
+    font-style: italic;
+    text-align: center;
+    max-width: 60%;
+}
+
+li.error {
+    background-color: #dc3545;
+    align-self: center;
+    text-align: center;
+    max-width: 60%;
+}
