@@ -30,7 +30,6 @@ function enterRoom(e){
    }
 }
 
-
 document.querySelector('.form-msg')
  .addEventListener('submit',sendMessage)
 
@@ -42,17 +41,34 @@ document.querySelector('.form-msg')
    socket.emit('activity', nameInput.value)
 })
 
-
  //listen for messages on 
  socket.on("message", (data) => {  
    activity.textContent = ""
+   const {name, text, time} = data
     const li = document.createElement('li')
-    li.textContent = data 
-    document.querySelector('ul').appendChild(li)
+    li. className = 'post'
+    if(name === nameInput.value) li.className = `psot post--left`
+    if(name !== nameInput.value && name !== ADMIN) 
+      li.className = `post post--right`
+     if(name !== 'Admin') {
+      li.innerHTML = `<div class="post__header ${name ===
+         nameInput.value
+         ? 'post__header--user'
+         : 'post__header--reply'
+      }">
+      <span class="post__header--name">${name}</span>
+      <span class="post__header--time">${time}</span>
+      </div>
+      <div class="post__text">${text}</div> `
+     } else {
+      li.innerHTML = `<div className="post__text">${text}</div>`
+     }
+    document.querySelector('.chat-display').appendChild(li)
+
+    chatDisplay.scrollTop = chatDisplay.scrollHeight
  })
 
  let activityTimer ;
-
  socket.on('activity', (name) => {
     activity.textContent = `${name} is typing...`
 
@@ -62,3 +78,39 @@ document.querySelector('.form-msg')
       activity.textContent = ""
     }, 3000)
  })
+
+socket.on('userList', ({users}) => {
+   showusers(users)
+})
+
+socket.on('roomList', ({rooms}) => {
+   showRooms(rooms)
+})
+
+ function showusers(users){
+   userlist.textContent = ""
+   if(users) {
+      userlist.innerHTML = `<em>Users in ${chatRoom.value}</em> `
+      users.forEach((user,id) => {
+       userlist.textContent +=  ` ${user.name}`
+       if(users.length > 1 && id !== users.length -1) {
+       userlist.textContent += ", "
+       }
+
+   })
+  }
+ }
+
+ function showRooms(rooms){
+   userlist.textContent = ""
+   if(rooms) {
+      userlist.innerHTML = `<em>Users in ${chatRoom.value}</em> `
+      rooms.forEach((room,id) => {
+       userlist.textContent +=  ` ${room.name}`
+       if(rooms.length > 1 && id !== rooms.length -1) {
+       userlist.textContent += ", "
+       }
+
+   })
+}
+ }
