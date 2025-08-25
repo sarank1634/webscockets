@@ -73,3 +73,31 @@ function buildMsg(name, text){
     }
 }
     
+//user function
+function activateUser(id, name, room) {
+    const user ={id, name, room}
+    userState.setUser([
+        ...userState.users.filter(user => user.id !== id),
+        user 
+    ])
+    return user
+}
+
+function userLeacesApp(id){
+    userState.setUser(
+        userState.users.filter(user => user.id !== id)
+    )
+}
+
+function getUser(id){
+    return userState.users.find(user => user.id === id)
+}
+
+
+function getUsersInRoom(room){
+    return userState.users.filter(user => user.room === room)
+}
+
+function getAllActiveRooms() {
+    return Array.from(new Set(userState.users.map(user => user.room)))
+}
