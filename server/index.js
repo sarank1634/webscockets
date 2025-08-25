@@ -35,13 +35,37 @@ const io = new Server(expressServer, {
 io.on('connection', socket => {
     console.log(`User ${socket.id} connected`) // get user id 
 
-
     //upon connection 
-     socket.emit('messgae', "Welcome to the chat!")
+     socket.emit('messgae', buildMsg(ADMIN, "Welcome to the chat!"))
 
-     //upon connection
-     socket.broadcast.emit('message', `User ${socket.id.substring(0,5)} connected`)
-     
+     socket.on(`enterRoom`, ({name, room}) => {
+
+        //leave previous room
+        const prevRoom = getUser(socket.id)?.room
+
+        if(prevRoom) {
+            socket.leave(prevRoom)
+            io.to(prevRoom).emit('message', buildMsg(ADMIN, `${name}
+                has left the room`))
+            }
+
+        const user = activateUser(socket.id, name, room)
+          // cannot  update previous room user list after the state update in activate user
+          if(prevRoom) {
+            io.to(prevRoom).emit('userList', {
+                users: getUsersInRoom(prevRoom)
+            })
+          }
+
+          //join room
+          socket.join(user.room)
+
+          // to user who joined
+          socket.emit(`message`, buildMsg(ADMIN, 'You have joined  the  ${user.room} chat Room'))
+
+          socket.broadcast.to(user.room).emit('message', buildMsg(ADMIN, `${user.name} has joined the room`))
+     })
+
      //Listing for a message event
     socket.on('message', data => {
        console.log(`${data}`)
@@ -56,7 +80,7 @@ io.on('connection', socket => {
 
     //Listing for activity
     socket.on('activity', (name) => {
-        socket.broadcast.emit('activity, name')
+        socket.broadcast.emit('activity', name)
     })
 })
 
