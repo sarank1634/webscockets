@@ -33,6 +33,7 @@ const io = new Server(expressServer, {
 })
 
 io.on('connection', socket => {
+
     console.log(`User ${socket.id} connected`) // get user id 
 
     //upon connection 
@@ -75,6 +76,7 @@ io.on('connection', socket => {
           io.to('roomsList', {
             roomlist: getAllActiveRooms()
           })
+        
      })
 
    //When the user is disconnected to all others
@@ -82,19 +84,35 @@ io.on('connection', socket => {
         const usere = getUser(socket.id)
         userLeavesApp(socket.id)
 
-        socket.broadcast.emit('message', `User ${socket.id.
-            substring(0,5)} disconnected`)
+        if(user) {
+            io.to(user.room).emit('message', buildMsg(Admin,`{
+              user.name } has been left the room`))
+
+              io.to(user.room).emit('userList', {
+                users: getUsersInRoom(user.room)
+              })
+
+              io.emit('roomList', {
+                room: getAllActiveRooms()
+              })
+        }
+        console.log(`User ${socket.id} disconnected`) // get user id 
     })
 
      //Listing for a message event
-    socket.on('message', data => {
-       console.log(`${data}`)
-        io.emit('message', `${socket.id.substring(0, 5)}: ${data}`)
+    socket.on('message', ({name, text}) => {
+       const room = getUser(socket.id)?.room
+       if(room) {
+        io.to(room).emit('message', buildMsg(name, text))
+       }
     })
 
     //Listing for activity
     socket.on('activity', (name) => {
-        socket.broadcast.emit('activity', name)
+        const room = getUser(socket.id)?.room
+        if(room) {
+            socket.broadcast.to(room).emit('activity', name)
+        }
     })
 })
 
