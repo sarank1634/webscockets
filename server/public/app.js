@@ -12,8 +12,8 @@ function sendMessage(e) {
     e.preventDefault()
     if(nameInput.value && msgInput.value && chatRoom.value){
         socket.emit('message', {
-        "name": nameInput.value ,
-        "text": msgInputvalue
+        name: nameInput.value ,
+        text: msgInput.value
     })
    msgInput.value= ""
     }
@@ -24,8 +24,8 @@ function enterRoom(e){
    e.preventDefault()
    if(nameInput.value && chatRoom.value) {
       socket.emit('join', {
-         "name": nameInput.value,
-         "room": chatRoom.value
+         name: nameInput.value,
+         room: chatRoom.value
       })
    }
 }
