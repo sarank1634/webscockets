@@ -4,7 +4,7 @@ const msgInput = document.querySelector('#message')
 const nameInput = document.querySelector('#name')
 const chatRoom = document.querySelector('#room')
 const activity = document.querySelector('.activity')
-const userlist = document.querySelector('.user-list')
+const userlist = document.querySelector('.user-lsit')
 const roomlist = document.querySelector('.room-list')
 const chatDisplay = document.querySelector('.Chat-display')
 
@@ -23,7 +23,7 @@ function sendMessage(e) {
 function enterRoom(e){
    e.preventDefault()
    if(nameInput.value && chatRoom.value) {
-      socket.emit('join', {
+      socket.emit('enterRoom', {
          name: nameInput.value,
          room: chatRoom.value
       })
@@ -47,8 +47,8 @@ document.querySelector('.form-msg')
    const {name, text, time} = data
     const li = document.createElement('li')
     li. className = 'post'
-    if(name === nameInput.value) li.className = `psot post--left`
-    if(name !== nameInput.value && name !== ADMIN) 
+    if(name === nameInput.value) li.className = `post post--left`
+    if(name !== nameInput.value && name !== 'Admin') 
       li.className = `post post--right`
      if(name !== 'Admin') {
       li.innerHTML = `<div class="post__header ${name ===
@@ -63,7 +63,7 @@ document.querySelector('.form-msg')
      } else {
       li.innerHTML = `<div className="post__text">${text}</div>`
      }
-    document.querySelector('.chat-display').appendChild(li)
+    document.querySelector('.Chat-display').appendChild(li)
 
     chatDisplay.scrollTop = chatDisplay.scrollHeight
  })
@@ -102,13 +102,13 @@ socket.on('roomList', ({rooms}) => {
  }
 
  function showRooms(rooms){
-   userlist.textContent = ""
+   roomlist.textContent = ""
    if(rooms) {
-      userlist.innerHTML = `<em>Users in ${chatRoom.value}</em> `
+      roomlist.innerHTML = `<em>Active Rooms:</em> `
       rooms.forEach((room,id) => {
-       userlist.textContent +=  ` ${room.name}`
+       roomlist.textContent +=  ` ${room}`
        if(rooms.length > 1 && id !== rooms.length -1) {
-       userlist.textContent += ", "
+       roomlist.textContent += ", "
        }
 
    })
