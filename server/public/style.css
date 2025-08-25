@@ -43,57 +43,55 @@ button {
     padding: .5rem;
 }
 
-.Chat-display {
+.chat-display {
     background-color: #333;
     list-style-type: none;
     width: 100%;
     max-width: 600px;
     border-radius: 10px;
     margin: 1rem auto;
-    padding: 1rem;
+    padding: 0;
     display: flex;
     flex-flow: column;
-    justify-content: flex-start;
-    overflow-y: auto;
+    justify-content: left;
+    overflow: auto;
     flex-grow: 1;
-    min-height: 400px;
-    border: 1px solid #555;
 }
 
 .post {
     background-color: #eee;
     border-radius: 10px;
-    padding: 0;
-    margin: .5rem 0;
+    padding: 0 0 .25rem;
+    margin: .5rem;
     overflow: hidden;
     flex-shrink: 0;
-    max-width: 80%;
 }
 
 .post--left {
+    width: 60%;
     align-self: flex-start;
 }
 
 .post--right {
+    width: 60%;
     align-self: flex-end;
 }
 
 .post__header {
     color: #fff;
-    padding: .5rem;
+    padding: .25rem .5rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    font-weight: bold;
-    font-size: 0.9rem;
+    gap: .5rem;
 }
 
 .post__header--user {
-    background-color: #007bff;
+    background-color: blue;
 }
 
 .post__header--reply {
-    background-color: #8e44ad;
+    background-color: purple;
 }
 
 .post__header--name {
@@ -102,30 +100,12 @@ button {
 
 .post__header--time {
     font-size: .8rem;
-    opacity: 0.9;
 }
 
 .post__text {
+    margin-top: 5px;
     color: #333;
-    padding: .75rem;
-    background-color: #fff;
-    font-size: 0.95rem;
-    line-height: 1.4;
-}
-
-/* Admin messages */
-.post:has(.post__text:only-child) {
-    background-color: #666;
-    color: #fff;
-    text-align: center;
-    max-width: 90%;
-    align-self: center;
-}
-
-.post:has(.post__text:only-child) .post__text {
-    background-color: #666;
-    color: #fff;
-    text-align: center;
+    padding: .25rem .5rem;
 }
 
 .user-list,
@@ -136,10 +116,8 @@ button {
     margin: 0 auto;
     max-width: 600px;
     padding: .75rem .25rem;
-    color: #ccc;
 }
 
 .activity {
     font-style: italic;
-    text-align: center;
 }

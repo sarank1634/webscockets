@@ -88,6 +88,7 @@ socket.on('roomList', ({rooms}) => {
 })
 
  function showUsers(users){
+   if(!userlist) return;  // Prevent error if element not found
    userlist.textContent = ""
    if(users) {
       userlist.innerHTML = `<em>Users in ${chatRoom.value}:</em> `
@@ -101,6 +102,7 @@ socket.on('roomList', ({rooms}) => {
  }
 
  function showRooms(rooms){
+   if(!roomlist) return;  // Same protection for rooms
    roomlist.textContent = ""
    if(rooms) {
       roomlist.innerHTML = `<em>Active Rooms:</em> `
